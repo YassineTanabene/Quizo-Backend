@@ -12,9 +12,10 @@ import { QuizModule } from './quiz/quiz.module';
 import { GroupModule } from './group/group.module';
 import { EmployeeResponseModule } from './employee-response/employee-response.module';
 import { GroupReportModule } from './group-report/group-report.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [SupabaseModule, UserModule, ProfileModule, AnswerModule, CategoryModule, QuestionModule, QuizModule, GroupModule, EmployeeResponseModule, GroupReportModule],
+  imports: [SupabaseModule, UserModule, ProfileModule, AnswerModule, CategoryModule, QuestionModule, QuizModule, GroupModule, EmployeeResponseModule, GroupReportModule, AuthModule],
   controllers: [AppController],
   providers: [AppService,SupabaseService],
 })
