@@ -1,8 +1,12 @@
+// user.module.ts
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './user.controller';
+import { UserService } from './user.service';
+import { SupabaseModule } from 'supabase/supabase.module';
 
 @Module({
+  imports: [SupabaseModule],
   controllers: [UserController],
   providers: [UserService],
 })
