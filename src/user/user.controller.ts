@@ -2,15 +2,24 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
 
 @Controller('user')
 export class UserController {
+  
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
-  create(@Body() createUserDto: CreateUserDto,@Body('firstName') firstName: string , @Body('lastName') lastName: string) {
-    return this.userService.createUser(createUserDto,firstName,lastName);
+// ----------------------------------------------SIGN UP USER AND PROFILE------------------------------------------------------------------------------------------
+
+  @Post('createUserProfile')
+
+  createUserProfile(@Body()CreateUserDto,@Body() CreateProfileDto,@Body('phone') phone: string): Promise<any>{
+  
+    return this.userService.createUserWithProfile(CreateUserDto,CreateProfileDto,phone);
+  
   }
+  
+
 
   @Get()
   findAll() {
