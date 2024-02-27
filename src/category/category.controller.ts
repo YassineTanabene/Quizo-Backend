@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Put } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -7,28 +7,50 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+//---------------------------------------------------Controller Create Category with RPC method ---------------------------------------------------------------
+
+
+  @Post('createcategory')
+  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoryService.createCategory(createCategoryDto);
   }
 
-  @Get()
-  findAll() {
-    return this.categoryService.findAll();
+
+//---------------------------------------------------Controller finAllCategories Category with RPC method ---------------------------------------------------------------
+
+
+  @Get('findallcategories')
+  findAllCategories() {
+    return this.categoryService.findAllCategories();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+
+//---------------------------------------------------Controller findOneCategory Category with RPC method ---------------------------------------------------------------
+
+
+  @Get('getonecategory')
+  findOneCategory(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoryService.findOneCategory(createCategoryDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(+id, updateCategoryDto);
+
+//---------------------------------------------------Controller update Category with RPC method ---------------------------------------------------------------
+
+
+  @Put('updatecategory')
+  updateCategory(@Body('id') id: string,@Body()updateCategoryDto: UpdateCategoryDto) {
+    return this.categoryService.updateCategory(id, updateCategoryDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+
+
+//---------------------------------------------------Controller Delete Category with RPC method ---------------------------------------------------------------
+
+
+  @Delete('deletecategory/:id')
+  removeCategory(@Param('id') id: string) {
+    return this.categoryService.deleteCategory(id);
   }
+
+  
 }

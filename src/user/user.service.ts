@@ -17,6 +17,7 @@ export class UserService {
 
 
 async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:CreateProfileDto, phone: string ): Promise<any> {
+
   const supabase = this.supabaseService.getClient();
 
   try {
@@ -37,20 +38,10 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
   } catch (error) {
 
     throw new Error("Error creating user with profile: " + error.message);
+    
   }
  
 }
-
-
-
-
-
-
-
-// -----------------------------------------------------CreateProfile in public.profile------------------------------------------------------------------------------------------
-// this service will be called by the (SIGN UP USER AND PROFILE in tables auth.users and public.profile) service!!!!!!!!!!!!!!!!!!!!
-
-
 
 
 // ----------------------------------------------UpdateUserPhone in table auth.users with RPC------------------------------------------------------------------------------------------

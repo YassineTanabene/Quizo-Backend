@@ -1,9 +1,89 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { SupabaseService } from 'supabase/supabase.service';
 
 @Injectable()
 export class AuthService {
+  constructor(private readonly supabaseService: SupabaseService){}
+
+
+ // -----------------------------------------------------SignIn¨User with email and password------------------------------------------------------------------------------------------
+
+ async SignInUser(email: string, password: string): Promise<any> {
+  const supabase = this.supabaseService.getClient();
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    // Assuming there is a user ID in the authentication data
+    const userId = data?.user.id;
+
+    if (!userId) {
+      throw new Error('User ID not found in authentication data');
+    }
+
+    // Fetch the user's profile based on the user ID
+    const profile = await this.getUserProfile(userId);
+
+    console.log("🚀 ~ UserService ~ signInUser ~ SignInsuccess!");
+
+    // Return both authentication data and user's profile
+    return { authenticationData: data, userProfile: profile };
+  } catch (error) {
+    throw new Error(`Error signing in: ${error.message}`);
+  }
+}
+
+async getUserProfile(userId: string): Promise<any> {
+  const supabase = this.supabaseService.getClient();
+
+  try {
+    
+    const { data, error } = await supabase
+      .from('profile')
+      .select('firstname, lastname, role')
+      .eq('idprofile', userId)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error.message);
+    throw new Error('Error fetching user profile');
+  }
+}
+
+
+
+
+// -------------------------------------------------------Logout USER------------------------------------------------------------------------------------------
+
+async logout():Promise<any>{
+
+  const supabase = this.supabaseService.getClient();
+
+  let { error } = await supabase.auth.signOut()
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return   console.log("🚀 ~ UserService ~ logout ~ logout Success !");
+  }
+
+
+
+
   create(createAuthDto: CreateAuthDto) {
     return 'This action adds a new auth';
   }
