@@ -52,7 +52,7 @@ export class CategoryService {
   }
 
 
-  //---------------------------------------------------Service Create Category with RPC method ---------------------------------------------------------------
+  //---------------------------------------------------Service update Category with RPC method ---------------------------------------------------------------
 
   async updateCategory(id: string,updateCategoryDto:UpdateCategoryDto):Promise<any>{
   
