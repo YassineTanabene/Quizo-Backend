@@ -1,1 +1,8 @@
-export class CreateQuestionDto {}
+export class CreateQuestionDto {
+
+    id_quiz: string;
+    question_content: string; 
+    explantation: string;
+    questiontype: string; 
+    
+}

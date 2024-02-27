@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Put, Delete } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
@@ -7,28 +7,38 @@ import { UpdateQuestionDto } from './dto/update-question.dto';
 export class QuestionController {
   constructor(private readonly questionService: QuestionService) {}
 
-  @Post()
+  //---------------------------------------------------Service Create Question with RPC method ---------------------------------------------------------------
+
+  @Post('createquestion')
   create(@Body() createQuestionDto: CreateQuestionDto) {
-    return this.questionService.create(createQuestionDto);
+    return this.questionService.createQuestion(createQuestionDto);
   }
 
-  @Get()
-  findAll() {
-    return this.questionService.findAll();
+  //---------------------------------------------------Service update Question with RPC method ---------------------------------------------------------------
+
+    @Put('updatequestion/:idquestion')
+    update(@Param('idquestion') idquestion: string, @Body() updateQuestionDto: UpdateQuestionDto) {
+      return this.questionService.updateQuestion(idquestion, updateQuestionDto);
+    }
+  
+  //---------------------------------------------------Service find all quiz questions Question with RPC method ---------------------------------------------------------------
+
+  @Get('findallquizquestions')
+  findAllQuizQuestions() {
+    return this.questionService.findAllQuizQuestions();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.questionService.findOne(+id);
+  //---------------------------------------------------Service find one Question with RPC method ---------------------------------------------------------------
+
+  @Get('findonequestion/:idquestion')
+  findOne(@Param('idquestion') idquestion: string) {
+    return this.questionService.findOneQuestion(idquestion);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateQuestionDto: UpdateQuestionDto) {
-    return this.questionService.update(+id, updateQuestionDto);
-  }
+  //---------------------------------------------------Service delete Question with RPC method ---------------------------------------------------------------
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.questionService.remove(+id);
+  @Delete('deletequestion/:idquestion')
+  remove(@Param('idquestion') idquestion: string) {
+    return this.questionService.deleteQuestion(idquestion);
   }
 }
