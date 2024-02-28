@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { AnswerService } from './answer.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 import { UpdateAnswerDto } from './dto/update-answer.dto';
@@ -7,28 +7,39 @@ import { UpdateAnswerDto } from './dto/update-answer.dto';
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
 
-  @Post()
+  //---------------------------------------------------Service Create Answer with RPC method ---------------------------------------------------------------
+
+  @Post('createanswer')
   create(@Body() createAnswerDto: CreateAnswerDto) {
-    return this.answerService.create(createAnswerDto);
+    return this.answerService.createAnswer(createAnswerDto);
+  }
+  
+  //---------------------------------------------------Service find all question Answers with RPC method ---------------------------------------------------------------
+
+  @Get('findallanswers/:id_question')
+  findAll(@Param('id_question') id_question: string) {
+    return this.answerService.findAllQuestionAnswers(id_question);
   }
 
-  @Get()
-  findAll() {
-    return this.answerService.findAll();
-  }
+  //---------------------------------------------------Service find one Answer with RPC method ---------------------------------------------------------------
 
-  @Get(':id')
+  @Get('findoneanswer/:id')
   findOne(@Param('id') id: string) {
-    return this.answerService.findOne(+id);
+    return this.answerService.findOneAnswer(id);
   }
 
-  @Patch(':id')
+  //---------------------------------------------------Service update Answer with RPC method ---------------------------------------------------------------
+
+  @Put('updateAnswer/:id')
   update(@Param('id') id: string, @Body() updateAnswerDto: UpdateAnswerDto) {
-    return this.answerService.update(+id, updateAnswerDto);
+    return this.answerService.updateAnswer(id, updateAnswerDto);
   }
 
-  @Delete(':id')
+  //---------------------------------------------------Service delete one Answer with RPC method ---------------------------------------------------------------
+
+  @Delete('deleteanswer/:id')
   remove(@Param('id') id: string) {
-    return this.answerService.remove(+id);
+    return this.answerService.deleteAnswer(id);
   }
+  
 }
