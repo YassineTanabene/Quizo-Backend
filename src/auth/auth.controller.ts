@@ -6,6 +6,7 @@ import { Roles } from './decorators';
 import { UserService } from 'src/user/user.service';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { SignOut } from '@supabase/supabase-js';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +16,6 @@ export class AuthController {
 //--------------------------------user.controller_signInUserPWD------------------------------------------------
 @Post('signInPwd')
 // @Roles('1', '2') // Specify the required roles
-// @UseGuards(RolesGuard)
-
 UserSignInPWD(@Body('email') email:string, @Body('password') password:string): Promise<any>{
 
   return this.authService.SignInUser(email,password);
@@ -25,7 +24,6 @@ UserSignInPWD(@Body('email') email:string, @Body('password') password:string): P
  
 
 // -------------------------------------------------------Logout USER------------------------------------------------------------------------------------------
-
 @Post('logout')
 logoutUser(){
   return this.authService.logout();

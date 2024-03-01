@@ -16,12 +16,9 @@ export class ProfileService {
 
     const supabase = this.supabaseService.getClient();
   
-    if (dto.role >3 ){
-      dto.role = 3; 
-      console.log("Nonexistent role : role set to default value")
-    }
+    
   
-    const {error : profileError} = await supabase.rpc('create_profile', {firstname : dto.firstname, lastname : dto.lastname, role :dto.role , id_user : id });
+    const {error : profileError} = await supabase.rpc('createprofile', {firstname : dto.firstname, lastname : dto.lastname , id_user : id });
   
     if (profileError){
       await supabase.auth.admin.deleteUser(id);

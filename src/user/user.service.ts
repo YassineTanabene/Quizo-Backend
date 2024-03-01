@@ -5,12 +5,12 @@ import { SupabaseService } from 'supabase/supabase.service';
 import { User } from './entities/user.entity';
 import { ProfileService } from 'src/profile/profile.service';
 import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
-
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService {
 
-  constructor(private readonly supabaseService: SupabaseService, private readonly ProfileService:ProfileService){}
+  constructor(private readonly supabaseService: SupabaseService, private readonly ProfileService:ProfileService, private readonly AuthService : AuthService ){}
   
 
 // ----------------------------------------------SIGN UP USER AND PROFILE in tables auth.users and public.profile------------------------------------------------------------------------------------------
@@ -22,16 +22,18 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
 
   try {
 
-    const { data: { user }, error: signUpError } = await supabase.auth.signUp( createuserdto );
-    
+    const { data: { user }, error: signUpError } = await supabase.auth.signUp( createuserdto);
+
     if (signUpError) {
 
       throw new Error(signUpError.message);
-    }
 
+    }
     this.ProfileService.CreateProfile(createprofiledto,user.id);
 
     this.updateUserPhone(user.id,phone)
+    await supabase.auth.admin.updateUserById(user.id,{user_metadata:{role: createuserdto.role}})
+
 
     return "User Profile Created Successfully ! ";
 

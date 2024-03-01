@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { SupabaseService } from 'supabase/supabase.service';
+import { SignOut } from '@supabase/supabase-js';
 
 @Injectable()
 export class AuthService {
@@ -33,10 +34,14 @@ export class AuthService {
     // Fetch the user's profile based on the user ID
     const profile = await this.getUserProfile(userId);
 
-    console.log("🚀 ~ UserService ~ signInUser ~ SignInsuccess!");
+    // console.log("🚀 ~ UserService ~ signInUser ~ SignInsuccess!");
 
-    // Return both authentication data and user's profile
-    return { authenticationData: data, userProfile: profile };
+    // const profileRole: string[] = Array.isArray(profile?.role)
+    // ?profile.role: [profile.role?.toString()];
+
+    // Return authentication data and user's profile and role
+    // , userProfile: profile teb3a el return 
+    return { authenticationData: data, profile };
   } catch (error) {
     throw new Error(`Error signing in: ${error.message}`);
   }
@@ -49,7 +54,7 @@ async getUserProfile(userId: string): Promise<any> {
     
     const { data, error } = await supabase
       .from('profile')
-      .select('firstname, lastname, role')
+      .select('firstname,lastname')
       .eq('idprofile', userId)
       .single();
 
@@ -73,12 +78,13 @@ async logout():Promise<any>{
 
   const supabase = this.supabaseService.getClient();
 
-  let { error } = await supabase.auth.signOut()
+  let { error } = await supabase.auth.signOut({ scope: 'global' })
 
   if (error) {
     throw new Error(error.message);
   }
-  return   console.log("🚀 ~ UserService ~ logout ~ logout Success !");
+  console.log("🚀 ~ UserService ~ logout ~ logout Success !");
+  return "Logout successful !"
   }
 
 
@@ -103,4 +109,9 @@ async logout():Promise<any>{
   remove(id: number) {
     return `This action removes a #${id} auth`;
   }
+
+
+
+
+
 }

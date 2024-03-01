@@ -1,7 +1,11 @@
 // roles.decorator.ts
 import { SetMetadata } from '@nestjs/common';
 
-export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
+/**
+ * 2 is for manager
+ * 3 is for employee
+ */
+export const Roles = (...args: number[]) => SetMetadata('roles', args);
 
 
 export const IS_PUBLIC_KEY = 'isPublic';

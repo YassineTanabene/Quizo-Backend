@@ -13,10 +13,11 @@ import { AnswerModule } from './answer/answer.module';
 import { GroupReportModule } from './group-report/group-report.module';
 import { EmployeeResponseModule } from './employee-response/employee-response.module';
 import { ProfileModule } from './profile/profile.module';
+import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [SupabaseModule, UserModule, AuthModule, GroupModule, CategoryModule, QuizModule, QuestionModule, AnswerModule, GroupReportModule, EmployeeResponseModule, ProfileModule],
   controllers: [AppController],
-  providers: [AppService,SupabaseService],
+  providers: [AppService,SupabaseService,RolesGuard],
 })
 export class AppModule {}
