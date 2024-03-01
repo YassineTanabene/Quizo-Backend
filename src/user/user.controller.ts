@@ -1,34 +1,62 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, Put } from '@nestjs/common';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateProfileDto } from 'src/profile/dto/update-profile.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { CreateProfileDto } from 'src/profile/dto/create-profile.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+ 
+
+// ----------------------------------------------SIGN UP USER AND PROFILE------------------------------------------------------------------------------------------
+
+@Post('createUserProfile')
+
+ createUserProfile(@Body() createUserDto: CreateUserDto, @Body() createProfileDto: CreateProfileDto): Promise<any> {
+  return this.userService.createUserWithProfile(createUserDto, createProfileDto);
+}
+
+// ----------------------------------------------Update One USER AND PROFILE------------------------------------------------------------------------------------------
+
+@Put('/updateuser/:id')
+async updateUser(
+  @Param('id') id: string,
+  @Body() updateUserDto: UpdateUserDto,
+  @Body() updateProfileDto: UpdateProfileDto
+) {
+  return this.userService.updateUser(id, updateUserDto, updateProfileDto);
+}
+
+
+// ----------------------------------------------Get All USER AND PROFILE------------------------------------------------------------------------------------------
+  @Get()
+  @UseGuards(RolesGuard,AuthGuard)
+  @Roles(Role.Owner)
+  findAll() {
+    return this.userService.getAllUser();
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+  // ----------------------------------------------Get One USER AND PROFILE------------------------------------------------------------------------------------------
+
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<any> {
+    return this.userService.getUser(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
 
-  @Delete(':id')
+  // ----------------------------------------------Delete One USER AND PROFILE------------------------------------------------------------------------------------------
+
+  @Delete('/remove/:id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
