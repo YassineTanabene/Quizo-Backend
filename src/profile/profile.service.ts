@@ -16,7 +16,6 @@ export class ProfileService {
       firstname : dto.firstname, 
       lastname : dto.lastname, 
       address: dto.address,
-      role :dto.role ,
       birthdate: dto.birthdate,
       joiningdate: dto.joiningdate,
       profilepicture: dto.profilepicture,
@@ -78,7 +77,6 @@ export class ProfileService {
       new_firstname: updateProfileDto.firstname,
       new_lastname: updateProfileDto.lastname,
       new_address: updateProfileDto.address,
-      new_role:updateProfileDto.role,
       new_birthdate: updateProfileDto.birthdate,
       new_joiningdate: updateProfileDto.joiningdate,
       new_profilepicture: updateProfileDto.profilepicture,
@@ -91,18 +89,21 @@ export class ProfileService {
   }
   
 
+  // -----------------------------------------------------Delete profile in public.profile without RPC------------------------------------------------------------------------------------------
 
 
+  async removeProfile(id: string): Promise<void> {
+    const supabase = this.supabaseService.getClient();
+    const {data, error } = await supabase
+      .from('profile')
+      .delete()
+      .eq('idprofile', id);
 
+    if (error) {
+      throw new Error(error.message);
+    }
+    console.log('Profile removed successfully !');
+    return data;
+  }
 
-
-
-   // async updateUserName(id: string,new_firstname: string):Promise<any>{
-  //   const supabase = this.supabaseService.getClient();
-  //   const { data, error } = await supabase.rpc('first_name_update', { id: id, first_name: new_firstname});
-  //   if (error) {
-  //     throw new Error(error.message);
-  //   }
-  //   return console.log("🚀 ~ UserService ~ updateUserName ~ success:");
-  // }
 }

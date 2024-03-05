@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { EmployeeResponseService } from './employee-response.service';
 import { CreateEmployeeResponseDto } from './dto/create-employee-response.dto';
 import { UpdateEmployeeResponseDto } from './dto/update-employee-response.dto';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('employeeResponse')
 export class EmployeeResponseController {
@@ -10,6 +13,8 @@ export class EmployeeResponseController {
   //-----------------------------------------------------Create Employee Response in public.employee_response------------------------------------------------------------------------------------------
 
   @Post('createEmployeeResponse')
+  //@UseGuards(RolesGuard,AuthGuard)
+  //@Roles(2,3)
   create(@Body() createDto: CreateEmployeeResponseDto) {
     return this.employeeResponseService.CreateEmployeeResponse(createDto);
   }

@@ -20,7 +20,10 @@ export class UserController {
 
 @Post('createUserProfile')
 
- createUserProfile(@Body() createUserDto: CreateUserDto, @Body() createProfileDto: CreateProfileDto): Promise<any> {
+ createUserProfile(
+  @Body() createUserDto: CreateUserDto,
+  @Body() createProfileDto: CreateProfileDto
+  ): Promise<any> {
   return this.userService.createUserWithProfile(createUserDto, createProfileDto);
 }
 
@@ -35,11 +38,9 @@ async updateUser(
   return this.userService.updateUser(id, updateUserDto, updateProfileDto);
 }
 
-
 // ----------------------------------------------Get All USER AND PROFILE------------------------------------------------------------------------------------------
+ 
   @Get()
-  @UseGuards(RolesGuard,AuthGuard)
-  @Roles(Role.Owner)
   findAll() {
     return this.userService.getAllUser();
   }
@@ -57,6 +58,6 @@ async updateUser(
 
   @Delete('/remove/:id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(id);
+    return this.userService.removeUser(id);
   }
 }

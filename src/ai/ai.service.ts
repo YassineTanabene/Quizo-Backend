@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ChatHistoryManager } from './model/chat-history-manager';
 import { ChatOpenAI } from '@langchain/openai';
 import { GetChatCompletionAnswerInputDTO, GetChatCompletionAnswerOutputDTO } from './model/chat-completion-answer.dto';
+import { PdfService } from 'src/uploadPdf/pdf/pdf.service';
 
 const DEFAULT_TEMPERATURE=1;
 const DEFAULT_MODEL="gpt-3.5-turbo";
@@ -10,7 +11,7 @@ export class AiService {
   private readonly chatHistory:ChatHistoryManager;
   private readonly chat:ChatOpenAI;
 
-  constructor(){
+  constructor(private readonly pdfService: PdfService){
     this.chatHistory=new ChatHistoryManager();
     this.chat=new ChatOpenAI ({
       temperature:DEFAULT_TEMPERATURE,
@@ -19,34 +20,27 @@ export class AiService {
     })
   }
 
-  async getAiModelAnswer(data:GetChatCompletionAnswerInputDTO){
-    this.chatHistory.addHumanMessage(data.message)
-    const result = await this.chat.invoke(
-      this.chatHistory.chatHistory,
-    );
-    const aiMessageString = result.content?.toString(); // Assuming 'content' holds the actual message
-this.chatHistory.addAiMessage(aiMessageString);
-return GetChatCompletionAnswerOutputDTO.getInstance(aiMessageString);
 
+
+async getAiModelAnswer(message: string, originalMessage: string, questionType: string): Promise<GetChatCompletionAnswerOutputDTO> {
+  this.chatHistory.addHumanMessage(originalMessage);
+  this.chatHistory.addHumanMessage(message);
+
+
+  switch (questionType) {
+    case 'pdf':
+      const result = await this.chat.invoke(
+              this.chatHistory.chatHistory,
+            );      const aiMessageString = result.content?.toString();
+      this.chatHistory.addAiMessage(aiMessageString);
+      return GetChatCompletionAnswerOutputDTO.getInstance(aiMessageString);
+    case 'general':
+      const generalResult = await this.chat.invoke(this.chatHistory.chatHistory);
+      this.chatHistory.addAiMessage(generalResult.content?.toString());
+      return GetChatCompletionAnswerOutputDTO.getInstance(generalResult.content?.toString());
+    default:
+      throw new Error('Type de question non pris en charge');
   }
+}
 
-  // create(createAiDto: CreateAiDto) {
-  //   return 'This action adds a new ai';
-  // }
-
-  // findAll() {
-  //   return `This action returns all ai`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} ai`;
-  // }
-
-  // update(id: number, updateAiDto: UpdateAiDto) {
-  //   return `This action updates a #${id} ai`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} ai`;
-  // }
 }

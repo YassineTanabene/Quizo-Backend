@@ -37,4 +37,11 @@ export class ProfileController {
   }
   
 
+    //-----------------------------------------------------Delete profile in public.profile------------------------------------------------------------------------------------------
+
+  @Delete('deleteGroup/:id')
+  remove(@Param('id') id: string) {
+    return this.profileService.removeProfile(id);
+  }
+
 }

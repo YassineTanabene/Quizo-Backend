@@ -11,7 +11,7 @@ export class EmployeeResponseService {
 
 async CreateEmployeeResponse(createDto:CreateEmployeeResponseDto): Promise<any>{
   const supabase = this.supabaseService.getClient();
-  const {error : employeeResponseError} = await supabase.rpc('create_employe_response', {
+  const {data,error : employeeResponseError} = await supabase.rpc('create_employe_response', {
     iduser: createDto.iduser,
     response : createDto.response, 
     isresponsecorrect : createDto.isresponsecorrect, 
@@ -21,7 +21,7 @@ async CreateEmployeeResponse(createDto:CreateEmployeeResponseDto): Promise<any>{
   if (employeeResponseError){
     throw new Error(employeeResponseError.message);   
   }
-  return console.log("🚀 ~ UserService ~ CreateEmployeeResponse ~ employeeResponse Created Successfully !");
+  return console.log("🚀 ~ UserService ~ CreateEmployeeResponse ~ employeeResponse Created Successfully !"),data;
   }
 
 

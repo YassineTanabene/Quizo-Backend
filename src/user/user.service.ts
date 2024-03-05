@@ -18,35 +18,6 @@ constructor(
 
 // ----------------------------------------------SIGN UP USER AND PROFILE in tables auth.users and public.profile------------------------------------------------------------------------------------------
 
-
-// async createUserWithProfile(
-//   createuserdto: CreateUserDto,
-//   updatedto: UpdateUserDto
-// ): Promise<any> {
-//   const supabase = this.supabaseService.getClient();
-
-//   try {
-//     const { data: { user }, error: signUpError } = await supabase.auth.signUp(
-//       createuserdto
-//     );
-
-//     if (signUpError) {
-//       throw new Error(signUpError.message);
-//     }
-
-//     // Update user metadata with role
-//     await supabase.auth.admin.updateUserById(user.id, {
-//       user_metadata: { role: updatedto.role },
-//     });
-
-//     // Rest of your user creation logic with profile data
-
-//   } catch (error) {
-//     throw new Error("Error creating user with profile: " + error.message);
-//   }
-// }
-
-
 async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:CreateProfileDto ): Promise<any> {
 
   const supabase = this.supabaseService.getClient();
@@ -60,10 +31,9 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
       throw new Error(signUpError.message);
 
     }
-    // this.ProfileService.CreateProfile(createprofiledto,user.id);
+     this.ProfileService.CreateProfile(createprofiledto,user.id);
 
     await supabase.auth.admin.updateUserById(user.id,{user_metadata:{role: createuserdto.role}})
-
 
     return "User Profile Created Successfully ! ";
 
@@ -76,41 +46,7 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
 }
 
 
-// async createUserWithProfile(
-//   createuserdto: CreateUserDto,
-//   createprofiledto: CreateProfileDto,
-// ): Promise<any> {
-//   const supabase = this.supabaseService.getClient();
-//   const role="user";
-//   try {
-//     const { data: { user }, error: signUpError } = await supabase.auth.signUp(
-//       createuserdto
-//     );
-
-//     if (signUpError) {
-//       throw new Error(signUpError.message);
-//     }
-
-//     // Mettre à jour le métadata avec le rôle de l'utilisateur
-//     const updatedUser = {
-//       ...user,
-//       metadata: {
-//         role,
-//       },
-//     };
-//     const { data, error } = await supabase.from('users').update(updatedUser);
-//     if (error) {
-//       throw new Error(error.message);
-//     }
-//   } catch (error) {
-//     throw new Error("Error creating user with profile: " + error.message);
-//   }
-// }
-
-
-
-
-// ----------------------------------------------GetOneUser in table auth.users and public.profile ------------------------------------------------------------------------------------------
+// ----------------------------------------------Get One User in table auth.users and public.profile ------------------------------------------------------------------------------------------
 
 
 async getUser(id: string): Promise<any> {
@@ -160,7 +96,7 @@ async getAllUser(): Promise<any> {
 }
 
 
-// ----------------------------------------------UpdateOneUser in table auth.users and public.profile ------------------------------------------------------------------------------------------
+// ----------------------------------------------Update One User in table auth.users and public.profile ------------------------------------------------------------------------------------------
 
 
 async updateUser(id: string, updateUserData: UpdateUserDto, updateProfileDto:UpdateProfileDto): Promise<any> {
@@ -183,26 +119,17 @@ async updateUser(id: string, updateUserData: UpdateUserDto, updateProfileDto:Upd
     throw new Error("Error updating user: " + error.message);
   }
 }
-  async remove(id: string) {
-    const supabase = this.supabaseService.getClient(); // Obtenez l'instance du client Supabase
+
+
+// ----------------------------------------------Delete One User in table auth.users and public.profile ------------------------------------------------------------------------------------------
+
+  async removeUser(id: string) {
+    const supabase = this.supabaseService.getClient(); 
     const { error } = await supabase.auth.admin.deleteUser(id)
 
     if (error) {throw new Error(error.message);}
     return console.log("🚀 ~ UserService ~ removeUser ~ success:");
   }
-
-
-
-  // ----------------------------------------------UpdateUserPhone in table auth.users with RPC------------------------------------------------------------------------------------------
-// this service will be called by the service createUserWithProfile
-// async updateUserPhone(id: string,new_phone: string):Promise<any>{
-//   const supabase = this.supabaseService.getClient();
-//   const { data, error } = await supabase.rpc('phone_update', { id_user: id, phone_number: new_phone});
-//   if (error) {
-//     throw new Error(error.message);
-//   }
-//   return data;
-// }
 
 
 

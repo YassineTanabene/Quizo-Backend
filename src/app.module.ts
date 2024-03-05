@@ -18,6 +18,8 @@ import { SupabaseModule } from 'supabase/supabase .module';
 import { AiModule } from './ai/ai.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { UploadController } from './uploadPdf/upload/upload.controller';
+import { PdfService } from './uploadPdf/pdf/pdf.service';
 
 @Module({
   imports: [
@@ -34,12 +36,12 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     AiModule
   ],
-  controllers: [AppController],
+  controllers: [AppController,UploadController],
   providers: [
     AppService,
     SupabaseService,
-    RolesGuard, // Ajoutez votre guard aux providers du module
-    
+    RolesGuard, 
+    PdfService
       
   ],
 })

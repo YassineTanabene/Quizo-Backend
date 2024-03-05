@@ -105,7 +105,8 @@ export class GroupService {
   }
 
 
-
+}
+//---------------------------------------------------------------------ken st7a9ine RPC -----------------------------------------------------------------------------------
 
   // -----------------------------------------------------Create Employee Response in public.employeeResponse with RPC------------------------------------------------------------------------------------------
 
@@ -193,4 +194,3 @@ export class GroupService {
 //     return console.log("🚀 ~ GroupService ~ remove_group ~ success:");
 
 //   }
-}

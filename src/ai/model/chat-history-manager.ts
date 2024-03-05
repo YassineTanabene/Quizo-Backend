@@ -11,7 +11,7 @@ export class ChatHistoryManager {
             this.addSystemMessage(systemMessage);
         }
     }
-    private addSystemMessage(message: string) {
+     addSystemMessage(message: string) {
         this.chatHistory.push(new SystemMessage(message));
     }
 
