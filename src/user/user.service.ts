@@ -22,7 +22,7 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
 
   try {
 
-    const { data: { user }, error: signUpError } = await supabase.auth.signUp( createuserdto);
+    const { data: { user }, error: signUpError } = await supabase.auth.signUp(createuserdto);
 
     if (signUpError) {
 

@@ -1,9 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('quiz')
+@UseGuards(AuthGuard,RolesGuard)
+@Roles(1,2)
 export class QuizController {
 
   constructor(private readonly quizService: QuizService) {}
@@ -13,7 +18,7 @@ export class QuizController {
 //---------------------------------------------------Controller Create quiz with RPC method ---------------------------------------------------------------
 
 
-  @Post('createquiz')
+  @Post('createQuiz')
   create(@Body() createQuizDto: CreateQuizDto) {
 
     return this.quizService.createCategory(createQuizDto);
@@ -25,7 +30,7 @@ export class QuizController {
 //---------------------------------------------------Controller update Quiz with RPC method ---------------------------------------------------------------
   
 
-  @Put('update/:idquiz')
+  @Put('updateQuiz/:idquiz')
   
   update(@Param('idquiz') idquiz: string, @Body() updateQuizDto: UpdateQuizDto) {
   
@@ -37,7 +42,7 @@ export class QuizController {
 //---------------------------------------------------Controller find All Quizes with RPC method ---------------------------------------------------------------
 
 
-  @Get('findallquizes')
+  @Get('findallQuizes')
 
   findAll() {
 
@@ -48,7 +53,7 @@ export class QuizController {
 
 //---------------------------------------------------Controller find One Quiz with RPC method ---------------------------------------------------------------
 
-  @Get('findonequiz/:idquiz')
+  @Get('findoneQuiz/:idquiz')
 
   findOne(@Param('idquiz') idquiz: string) {
 
@@ -59,7 +64,7 @@ export class QuizController {
 
 //---------------------------------------------------Controller delete Quiz with RPC method ---------------------------------------------------------------
 
-  @Delete('delete/:idquiz')
+  @Delete('deleteQuiz/:idquiz')
 
   remove(@Param('idquiz') idquiz: string) {
 

@@ -14,10 +14,13 @@ import { GroupReportModule } from './group-report/group-report.module';
 import { EmployeeResponseModule } from './employee-response/employee-response.module';
 import { ProfileModule } from './profile/profile.module';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { PdfService } from './uploadPdf/pdf/pdf.service';
+import { UploadController } from './uploadPdf/upload/upload.controller';
+import { ChatCompletionApiModule } from './chat-completion-api/chat-completion-api.module';
 
 @Module({
-  imports: [SupabaseModule, UserModule, AuthModule, GroupModule, CategoryModule, QuizModule, QuestionModule, AnswerModule, GroupReportModule, EmployeeResponseModule, ProfileModule],
-  controllers: [AppController],
-  providers: [AppService,SupabaseService,RolesGuard],
+  imports: [SupabaseModule, UserModule, AuthModule, GroupModule, CategoryModule, QuizModule, QuestionModule, AnswerModule, GroupReportModule, EmployeeResponseModule, ProfileModule, ChatCompletionApiModule],
+  controllers: [AppController, UploadController],
+  providers: [AppService,SupabaseService,RolesGuard, PdfService],
 })
 export class AppModule {}

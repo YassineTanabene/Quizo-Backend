@@ -2,8 +2,9 @@
 import { SetMetadata } from '@nestjs/common';
 
 /**
- * 2 is for manager
- * 3 is for employee
+ * 1 is for Owner
+ * 2 is for Manager
+ * 3 is for Employee
  */
 export const Roles = (...args: number[]) => SetMetadata('roles', args);
 

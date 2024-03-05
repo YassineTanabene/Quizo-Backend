@@ -9,12 +9,15 @@ import { AuthGuard } from './guards/auth.guard';
 import { SignOut } from '@supabase/supabase-js';
 
 @Controller('auth')
+
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
 
 
 //--------------------------------user.controller_signInUserPWD------------------------------------------------
-@Post('signInPwd')
+@UseGuards(RolesGuard)
+@Roles(1,2)
+@Post('signIn')
 // @Roles('1', '2') // Specify the required roles
 UserSignInPWD(@Body('email') email:string, @Body('password') password:string): Promise<any>{
 
@@ -24,7 +27,9 @@ UserSignInPWD(@Body('email') email:string, @Body('password') password:string): P
  
 
 // -------------------------------------------------------Logout USER------------------------------------------------------------------------------------------
-@Post('logout')
+@UseGuards(AuthGuard,RolesGuard)
+@Roles(1,2)
+@Post('signout')
 logoutUser(){
   return this.authService.logout();
 }

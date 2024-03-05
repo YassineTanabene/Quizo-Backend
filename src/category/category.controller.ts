@@ -8,7 +8,8 @@ import { Roles } from 'src/auth/decorators';
 
 
 // @UseGuards(AuthGuard)
-
+@UseGuards(AuthGuard,RolesGuard)
+@Roles(1,2)
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
@@ -16,9 +17,7 @@ export class CategoryController {
 //---------------------------------------------------Controller Create Category with RPC method ---------------------------------------------------------------
 
 
-  @Post('createcategory')
-  @UseGuards(AuthGuard,RolesGuard)
-  @Roles(2,3)
+  @Post('createCategory')
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.createCategory(createCategoryDto);
   }
@@ -27,7 +26,7 @@ export class CategoryController {
 //---------------------------------------------------Controller finAllCategories Category with RPC method ---------------------------------------------------------------
 
 
-  @Get('findallcategories')
+  @Get('findallCategories')
   findAllCategories() {
     return this.categoryService.findAllCategories();
   }
@@ -36,7 +35,7 @@ export class CategoryController {
 //---------------------------------------------------Controller findOneCategory Category with RPC method ---------------------------------------------------------------
 
 
-  @Get('getonecategory')
+  @Get('findOneCategory')
   findOneCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.findOneCategory(createCategoryDto);
   }
@@ -45,7 +44,7 @@ export class CategoryController {
 //---------------------------------------------------Controller update Category with RPC method ---------------------------------------------------------------
 
 
-  @Put('updatecategory')
+  @Put('updateCategory')
   updateCategory(@Body('id') id: string,@Body()updateCategoryDto: UpdateCategoryDto) {
     return this.categoryService.updateCategory(id, updateCategoryDto);
   }
@@ -55,7 +54,7 @@ export class CategoryController {
 //---------------------------------------------------Controller Delete Category with RPC method ---------------------------------------------------------------
 
 
-  @Delete('deletecategory/:id')
+  @Delete('deleteCategory/:id')
   removeCategory(@Param('id') id: string) {
     return this.categoryService.deleteCategory(id);
   }
