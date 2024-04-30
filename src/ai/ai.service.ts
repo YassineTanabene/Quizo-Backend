@@ -6,7 +6,7 @@ import { PdfService } from 'src/uploadPdf/pdf/pdf.service';
 
 const DEFAULT_TEMPERATURE=1;
 const DEFAULT_MODEL="gpt-3.5-turbo";
-@Injectable()
+@Injectable()    
 export class AiService {
   private readonly chatHistory:ChatHistoryManager;
   private readonly chat:ChatOpenAI;
@@ -15,9 +15,9 @@ export class AiService {
     this.chatHistory=new ChatHistoryManager();
     this.chat=new ChatOpenAI ({
       temperature:DEFAULT_TEMPERATURE,
-      openAIApiKey:'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',
+      openAIApiKey:'sk-proj-FMF4VpMHx6Uyy3PAj6w3T3BlbkFJWHgnLFcwA6ldC0wJ3V5M',
       modelName:DEFAULT_MODEL,
-    })
+    }) 
   }
 
 

@@ -8,4 +8,6 @@ export class UpdateProfileDto extends PartialType(CreateProfileDto) {
     birthdate?: Date;
     joiningdate?: Date;
     profilepicture?: string;
+    groupe?: string;
 }
+ 

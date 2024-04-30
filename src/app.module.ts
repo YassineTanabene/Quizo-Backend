@@ -34,7 +34,8 @@ import { PdfService } from './uploadPdf/pdf/pdf.service';
     EmployeeResponseModule,
     GroupReportModule,
     AuthModule,
-    AiModule
+    AiModule,
+    QuizModule
   ],
   controllers: [AppController,UploadController],
   providers: [

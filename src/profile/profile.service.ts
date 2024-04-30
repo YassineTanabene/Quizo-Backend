@@ -27,7 +27,7 @@ export class ProfileService {
       throw new Error(profileError.message);   
     }
     return console.log("🚀 ~ UserService ~ createProfile ~ User Profile Created Successfully !");
-    } 
+    }  
 
 
 // ----------------------------------------------Get All Profile in table public.profile with RPC------------------------------------------------------------------------------------------
@@ -73,21 +73,22 @@ export class ProfileService {
   ): Promise<any> {
     const supabase = this.supabaseService.getClient();
     const { data,error } = await supabase.rpc('update_profile', {
-      id: id,
+      idprofile: id,
       new_firstname: updateProfileDto.firstname,
       new_lastname: updateProfileDto.lastname,
       new_address: updateProfileDto.address,
       new_birthdate: updateProfileDto.birthdate,
       new_joiningdate: updateProfileDto.joiningdate,
       new_profilepicture: updateProfileDto.profilepicture,
-    });
-  
+      new_groupe: updateProfileDto.groupe,
+    });  
+   
     if (error) {
-      throw new Error(error.message);
+      throw new Error(error.message); 
     }
-    return console.log("Profile updated successfully !",data)
+    return console.log("Profile updated successfully !",data),data
   }
-  
+    
 
   // -----------------------------------------------------Delete profile in public.profile without RPC------------------------------------------------------------------------------------------
 
@@ -107,3 +108,6 @@ export class ProfileService {
   }
 
 }
+
+ 
+ 

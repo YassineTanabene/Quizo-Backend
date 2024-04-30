@@ -9,7 +9,7 @@ export class ProfileController {
 
 //-----------------------------------------------------Create Profile in public.profile------------------------------------------------------------------------------------------
 
-@Post('createUserProfile')
+@Post('createUserProfilee')
   createProfile(@Body('id') id: string , @Body() dto:CreateProfileDto): Promise<any>{
   return this.profileService.CreateProfile(dto,id);
 }
@@ -31,7 +31,7 @@ export class ProfileController {
 
   //-----------------------------------------------------Update profile in public.profile------------------------------------------------------------------------------------------
 
-  @Put('/updateProfile/:id')
+  @Put('updateProfile/:id')
   update(@Param('id') id: string,@Body() updateProfileDto:UpdateProfileDto) {
     return this.profileService.updateProfile(id,updateProfileDto);
   }
@@ -39,7 +39,7 @@ export class ProfileController {
 
     //-----------------------------------------------------Delete profile in public.profile------------------------------------------------------------------------------------------
 
-  @Delete('deleteGroup/:id')
+  @Delete('deleteGroup/:id')  
   remove(@Param('id') id: string) {
     return this.profileService.removeProfile(id);
   }

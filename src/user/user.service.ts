@@ -24,7 +24,10 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
 
   try {
 
-    const { data: { user }, error: signUpError } = await supabase.auth.signUp( createuserdto);
+    const { data: { user }, error: signUpError } = await supabase.auth.signUp(     
+{      email: createuserdto.email,
+      password: createuserdto.password,
+      } );
 
     if (signUpError) {
 
@@ -34,14 +37,16 @@ async createUserWithProfile(createuserdto:CreateUserDto, createprofiledto:Create
      this.ProfileService.CreateProfile(createprofiledto,user.id);
 
     await supabase.auth.admin.updateUserById(user.id,{user_metadata:{role: createuserdto.role}})
+    await supabase.auth.admin.updateUserById(user.id,{phone: createuserdto.phone})
+
 
     return "User Profile Created Successfully ! ";
 
   } catch (error) {
 
-    throw new Error("Error creating user with profile: " + error.message);
+    throw new Error("Error creating user with profile: " + error.message); 
 
-  }
+  } 
  
 }
 
@@ -86,7 +91,7 @@ async getAllUser(): Promise<any> {
         combinedData.push({
           user: user,
           profile: userProfile
-        });
+        }); 
       }
     }
     return combinedData;
@@ -99,26 +104,30 @@ async getAllUser(): Promise<any> {
 // ----------------------------------------------Update One User in table auth.users and public.profile ------------------------------------------------------------------------------------------
 
 
-async updateUser(id: string, updateUserData: UpdateUserDto, updateProfileDto:UpdateProfileDto): Promise<any> {
+async updateUser(id: string, updateUserDto: UpdateUserDto, updateProfileDto: UpdateProfileDto): Promise<any> {
   const supabase = this.supabaseService.getClient();
   try {
     // Mettre à jour les informations de l'utilisateur dans la table auth.users
     const { data: userData, error: userError } = await supabase.auth.admin.updateUserById(id, {
-      email: updateUserData.email,
-      password: updateUserData.password,
-      phone: updateUserData.phone
+      email: updateUserDto.email,
+      password: updateUserDto.password,
+      phone: updateUserDto.phone
     });
     if (userError) {
       throw new Error(userError.message);
     }
     console.log("🚀 User updated successfully:", userData);
+
     // Mettre à jour les informations de profil dans la table public.profile
-    this.ProfileService.updateProfile(id, updateProfileDto);
-    return userData;
+    const profileData = await this.ProfileService.updateProfile(id, updateProfileDto);
+    console.log("Profile updated successfully:", profileData);
+
+    return { userData,profileData };
   } catch (error) {
     throw new Error("Error updating user: " + error.message);
   }
 }
+
 
 
 // ----------------------------------------------Delete One User in table auth.users and public.profile ------------------------------------------------------------------------------------------

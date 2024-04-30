@@ -21,7 +21,8 @@ async CreateEmployeeResponse(createDto:CreateEmployeeResponseDto): Promise<any>{
   if (employeeResponseError){
     throw new Error(employeeResponseError.message);   
   }
-  return console.log("🚀 ~ UserService ~ CreateEmployeeResponse ~ employeeResponse Created Successfully !"),data;
+  return console.log("🚀 ~ UserService ~ CreateEmployeeResponse ~ employeeResponse Created Successfully !",data),data;
+  
   }
 
 

@@ -28,27 +28,27 @@ export class UserController {
 }
 
 // ----------------------------------------------Update One USER AND PROFILE------------------------------------------------------------------------------------------
-
+ 
 @Put('/updateuser/:id')
 async updateUser(
   @Param('id') id: string,
   @Body() updateUserDto: UpdateUserDto,
   @Body() updateProfileDto: UpdateProfileDto
-) {
+): Promise<any> {
   return this.userService.updateUser(id, updateUserDto, updateProfileDto);
 }
 
 // ----------------------------------------------Get All USER AND PROFILE------------------------------------------------------------------------------------------
  
   @Get()
-  findAll() {
+  findAll() { 
     return this.userService.getAllUser();
   }
-
+ 
   // ----------------------------------------------Get One USER AND PROFILE------------------------------------------------------------------------------------------
 
 
-  @Get(':id')
+  @Get('/getuser/:id')
   findOne(@Param('id') id: string): Promise<any> {
     return this.userService.getUser(id);
   }
@@ -61,3 +61,4 @@ async updateUser(
     return this.userService.removeUser(id);
   }
 }
+ 

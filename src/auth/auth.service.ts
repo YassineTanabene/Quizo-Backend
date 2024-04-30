@@ -9,58 +9,40 @@ export class AuthService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
 
+
+  async SignInUser(email: string, password: string): Promise<any> {
+    const supabase = this.supabaseService.getClient();
   
-//   async signin(email: string, password: string): Promise<any> {
-//     const supabase = this.supabaseService.getClient();
-
-//     const { data, error } = await supabase.auth.signInWithPassword({
-//       email: email,
-//       password: password,
-//     });
-
-//     if (error) {
-//       throw new Error(error.message);
-//     }
-
-//     console.log("🚀 ~ UserService ~ signin ~ data:", data);
-//     return data;
-// }
-
-async SignInUser(email: string, password: string): Promise<any> {
-  const supabase = this.supabaseService.getClient();
-
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      throw new Error(error.message);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      const userId = data?.user?.id;
+  
+      if (!userId) {
+        throw new Error('User ID not found in authentication data');
+      }
+  
+      // Fetch the user's profile based on the user ID
+      const profile = await this.getUserProfile(userId);
+  
+      // Extract token from the data object based on its structure
+      const accessToken = data?.session?.access_token || '';
+  
+      return { authenticationData: { user: data?.user, session: data?.session }, profile, accessToken };
+    } catch (error) {
+      throw new Error(`Error signing in: ${error.message}`);
     }
-
-    // Assuming there is a user ID in the authentication data
-    const userId = data?.user.id;
-
-    if (!userId) {
-      throw new Error('User ID not found in authentication data');
-    }
-
-    // Fetch the user's profile based on the user ID
-    const profile = await this.getUserProfile(userId);
-
-    // console.log("🚀 ~ UserService ~ signInUser ~ SignInsuccess!");
-
-    // const profileRole: string[] = Array.isArray(profile?.role)
-    // ?profile.role: [profile.role?.toString()];
-
-    // Return authentication data and user's profile and role
-    // , userProfile: profile teb3a el return 
-    return { authenticationData: data, profile };
-  } catch (error) {
-    throw new Error(`Error signing in: ${error.message}`);
   }
-}
+  
+  
+
 
 async getUserProfile(userId: string): Promise<any> {
   const supabase = this.supabaseService.getClient();
@@ -69,7 +51,7 @@ async getUserProfile(userId: string): Promise<any> {
     
     const { data, error } = await supabase
       .from('profile')
-      .select('firstname,lastname')
+      .select('*')
       .eq('idprofile', userId)
       .single();
 
