@@ -45,7 +45,7 @@ export class AiController {
       text = await this.pdfService.extractTextFromPdf(filePath);
     } else {
       // Utiliser le message fourni si aucun fichier n'est téléchargé
-      text = message;
+     return 'Please  provide a file ';
     }
 
     // Envoyer le texte extrait ou le message fourni au service AI
