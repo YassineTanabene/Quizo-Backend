@@ -11,5 +11,5 @@ export class ChatCompletionApiController {
         return this.service.getAiModelAnswer(data);
     }
 
-    
+
 }
