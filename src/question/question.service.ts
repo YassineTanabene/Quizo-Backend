@@ -30,10 +30,29 @@ export class QuestionService {
       throw new Error(CreateQuestionError.message);
     }
 
-    return console.log("🚀 ~ QuestionService ~ createQuestion ~ Question Successfully created !"),Question;
+    return console.log("🚀 ~ QuestionService ~ createQuestion ~ Question Successfully created !",Question);
     
   }
 
+
+  async createQuestions(createQuestionDto: CreateQuestionDto): Promise<any> {
+    const supabase = this.supabaseService.getClient();
+  
+    const { data: questionData, error: questionError } = await supabase.rpc('createquestion', {
+      id_quiz: createQuestionDto.id_quiz,
+      question_content: createQuestionDto.question_content,
+      explantation: createQuestionDto.explantation,
+      questiontype: createQuestionDto.questiontype,
+      answers: createQuestionDto.answers // Pass answers array to the stored procedure
+    });
+  
+    if (questionError) {
+      throw new Error(questionError.message);
+    }
+  
+    console.log("Question and Answers created successfully!", questionData);
+    return questionData;
+  }
 
 
 //---------------------------------------------------Service update Question with RPC method ---------------------------------------------------------------
@@ -116,4 +135,79 @@ export class QuestionService {
     const{data , error} = await supabase.from('question').delete().eq('id',idquestion)
     return  console.log("🚀 ~ QuestionService ~ deleteQuestion ~ Question deleted !"), data;
   }
+
+  async findQuestionById(idquestion: string) {
+    const supabase = this.supabaseService.getClient();
+  
+    try {
+      const { data: questions, error } = await supabase
+        .from('question')
+        .select('*') 
+        .eq('id', idquestion);
+  
+      if (error) {
+        throw new Error(error.message);
+      }
+  
+      if (!questions.length) {
+        return null; 
+      }
+   
+      const answersPromises = questions.map(async (question) => {
+        const { data: answers, error: answerError } = await supabase
+          .from('answer')
+          .select('*') 
+          .eq('id_question', question.id); 
+        if (answerError) {
+          throw new Error(answerError.message);
+        }
+        return { ...question, answers };
+      });
+      const questionsWithAnswers = await Promise.all(answersPromises);
+      return questionsWithAnswers;
+    } catch (error) {
+      console.error('Error fetching question and answers:', error);
+  
+      return null; 
+    }
+  }
+
+  
+async findQuestionsByQuizId(quizId: string) {
+  const supabase = this.supabaseService.getClient();
+
+  try {
+    const { data: questions, error } = await supabase
+      .from('question')
+      .select('*') 
+      .eq('id_quiz', quizId); // Utilisez l'ID du quiz pour récupérer les questions associées
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!questions.length) {
+      return null; 
+    }
+ 
+    const answersPromises = questions.map(async (question) => {
+      const { data: answers, error: answerError } = await supabase
+        .from('answer')
+        .select('*') 
+        .eq('id_question', question.id); 
+      if (answerError) {
+        throw new Error(answerError.message);
+      }
+      return { ...question, answers };
+    });
+    const questionsWithAnswers = await Promise.all(answersPromises);
+    return questionsWithAnswers;
+  } catch (error) {
+    console.error('Error fetching questions and answers by quiz ID:', error);
+
+    return null; 
+  }
+}
+
+  
 }

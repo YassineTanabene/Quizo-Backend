@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { SupabaseService } from 'supabase/supabase.service';
-
+import { QuestionService } from 'src/question/question.service';
 @Injectable()
 export class QuizService {
   
-  constructor(private readonly supabaseService: SupabaseService){}
+  constructor(private readonly supabaseService: SupabaseService ,private readonly QuestionService:QuestionService){}
 
 
 //---------------------------------------------------Service Create quiz with RPC method ---------------------------------------------------------------
@@ -111,22 +111,34 @@ async findAllQuizes() {
 
 //---------------------------------------------------Service find One Category with RPC method ---------------------------------------------------------------
 
-
- async findOneQuiz(idquiz: string) {
-
+async findOneQuiz(idquiz: string) {
   const supabase = this.supabaseService.getClient();
 
-  const {data, error: findOneQuizError} = await supabase.rpc('findonequiz', {idquiz:idquiz})
+  try {
+    const { data: quizData, error: findOneQuizError } = await supabase.rpc('findonequiz', { idquiz: idquiz });
+    if (findOneQuizError) {
+      throw new Error(findOneQuizError.message);
+    }
 
-  if (findOneQuizError){
+    if (!quizData) {
+      throw new Error('Quiz not found');
+    }
 
-    throw new Error(findOneQuizError.message)
+    const questionData = await this.QuestionService.findQuestionsByQuizId(idquiz);
+
+    console.log("🚀 ~Quiz avec ses questions, et chaque question avec ses answers", {
+      quiz: quizData,
+      questions: questionData
+    });
+
+    return {
+      quiz: quizData,
+      questions: questionData
+    };
+  } catch (error) {
+    throw new Error(error.message);
   }
-
-  return console.log("🚀 ~ QuizService ~ findOneQuiz ~ Quiz found successfully !"),data;
-
 }
-
 
 
 }

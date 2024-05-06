@@ -7,8 +7,8 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators';
 
 @Controller('answer')
-@UseGuards(AuthGuard,RolesGuard)
-@Roles(1,2)
+// @UseGuards(AuthGuard,RolesGuard)
+// @Roles(1,2)
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
 

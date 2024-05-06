@@ -15,9 +15,9 @@ export class AuthController {
 
 
 //--------------------------------user.controller_signInUserPWD------------------------------------------------
-@UseGuards(RolesGuard)
-@Roles(1,2)
-@Post('signIn')
+// @UseGuards(RolesGuard)
+// @Roles(1,2)
+@Post('signin')
 // @Roles('1', '2') // Specify the required roles
 UserSignInPWD(@Body('email') email:string, @Body('password') password:string): Promise<any>{
 
@@ -27,12 +27,12 @@ UserSignInPWD(@Body('email') email:string, @Body('password') password:string): P
  
 
 // -------------------------------------------------------Logout USER------------------------------------------------------------------------------------------
-@UseGuards(AuthGuard,RolesGuard)
-@Roles(1,2)
-@Post('signout')
-logoutUser(){
-  return this.authService.logout();
-}
+// @UseGuards(AuthGuard,RolesGuard)
+// @Roles(1,2)
+@Post('/logout')
+  async signOut() {
+        await this.authService.logout();
+  }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 

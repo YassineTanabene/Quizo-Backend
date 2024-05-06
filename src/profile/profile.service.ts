@@ -1,3 +1,52 @@
+// import { Injectable } from '@nestjs/common';
+// import { CreateProfileDto } from './dto/create-profile.dto';
+// import { UpdateProfileDto } from './dto/update-profile.dto';
+// import { SupabaseService } from 'supabase/supabase.service';
+
+// @Injectable()
+// export class ProfileService {
+
+//   constructor(private readonly supabaseService: SupabaseService){}
+
+  
+// // -----------------------------------------------------CreateProfile in public.profile------------------------------------------------------------------------------------------
+// // this service will be called by the (SIGN UP USER AND PROFILE in tables auth.users and public.profile) service!!!!!!!!!!!!!!!!!!!!
+
+//   async CreateProfile(dto:CreateProfileDto,id:string): Promise<any>{
+
+//     const supabase = this.supabaseService.getClient();
+  
+    
+  
+//     const {error : profileError} = await supabase.rpc('createprofile', {firstname : dto.firstname, lastname : dto.lastname , id_user : id });
+  
+//     if (profileError){
+//       await supabase.auth.admin.deleteUser(id);
+//       throw new Error(profileError.message);
+        
+//     }
+
+//     return console.log("🚀 ~ UserService ~ createProfile ~ User Profile Created Successfully !");
+
+//     }
+  
+//   findAll() {
+//     return `This action returns all profile`;
+//   }
+
+//   findOne(id: number) {
+//     return `This action returns a #${id} profile`;
+//   }
+
+//   update(id: number, updateProfileDto: UpdateProfileDto) {
+//     return `This action updates a #${id} profile`;
+//   }
+
+//   remove(id: number) {
+//     return `This action removes a #${id} profile`;
+//   }
+// }
+
 import { Injectable } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -8,41 +57,106 @@ export class ProfileService {
 
   constructor(private readonly supabaseService: SupabaseService){}
 
-  
-// -----------------------------------------------------CreateProfile in public.profile------------------------------------------------------------------------------------------
-// this service will be called by the (SIGN UP USER AND PROFILE in tables auth.users and public.profile) service!!!!!!!!!!!!!!!!!!!!
+  // -----------------------------------------------------Create Profile in public.profile------------------------------------------------------------------------------------------
 
   async CreateProfile(dto:CreateProfileDto,id:string): Promise<any>{
-
     const supabase = this.supabaseService.getClient();
-  
-    
-  
-    const {error : profileError} = await supabase.rpc('createprofile', {firstname : dto.firstname, lastname : dto.lastname , id_user : id });
-  
+    const {error : profileError} = await supabase.rpc('create_profile_user', {
+      firstname : dto.firstname, 
+      lastname : dto.lastname, 
+      address: dto.address,
+      birthdate: dto.birthdate,
+      joiningdate: dto.joiningdate,
+      profilepicture: dto.profilepicture,
+      groupe: dto.groupe,
+      id_user : id 
+    });
     if (profileError){
       await supabase.auth.admin.deleteUser(id);
-      throw new Error(profileError.message);
-        
+      throw new Error(profileError.message);   
     }
-
     return console.log("🚀 ~ UserService ~ createProfile ~ User Profile Created Successfully !");
+    }  
 
+
+// ----------------------------------------------Get All Profile in table public.profile with RPC------------------------------------------------------------------------------------------
+
+  async getAllProfile() : Promise<any> {
+    const supabase = this.supabaseService.getClient();
+    try {
+      const { data, error } = await supabase.rpc('get_all_profiles');
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    } catch (error) {
+      console.error('Error fetching user profile:', error.message);
+      return null;
     }
-  
-  findAll() {
-    return `This action returns all profile`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  // ----------------------------------------------Get One Profile in table public.profile with RPC------------------------------------------------------------------------------------------
+
+  async getUserProfile(id: string): Promise<any> {
+    const supabase = this.supabaseService.getClient();
+    try {
+      const { data, error } = await supabase.rpc('get_user_profile', { user_id: id });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    } catch (error) {
+      console.error('Error fetching user profile:', error.message);
+      return null;
+    }
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
+ 
+    
+  // ----------------------------------------------Update Profile in table public.profile with RPC------------------------------------------------------------------------------------------
+
+
+  async updateProfile(
+    id: string,
+   updateProfileDto: UpdateProfileDto
+  ): Promise<any> {
+    const supabase = this.supabaseService.getClient();
+    const { data,error } = await supabase.rpc('update_profile', {
+      idprofile: id,
+      new_firstname: updateProfileDto.firstname,
+      new_lastname: updateProfileDto.lastname,
+      new_address: updateProfileDto.address,
+      new_birthdate: updateProfileDto.birthdate,
+      new_joiningdate: updateProfileDto.joiningdate,
+      new_profilepicture: updateProfileDto.profilepicture,
+      new_groupe: updateProfileDto.groupe,
+    });  
+   
+    if (error) {
+      throw new Error(error.message); 
+    }
+    return console.log("Profile updated successfully !",data),data
+  }
+    
+
+  // -----------------------------------------------------Delete profile in public.profile without RPC------------------------------------------------------------------------------------------
+
+
+  async removeProfile(id: string): Promise<void> {
+    const supabase = this.supabaseService.getClient();
+    const {data, error } = await supabase
+      .from('profile')
+      .delete()
+      .eq('idprofile', id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    console.log('Profile removed successfully !');
+    return data;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
-  }
 }
+
+ 
+ 

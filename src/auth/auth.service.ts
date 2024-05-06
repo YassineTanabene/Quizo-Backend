@@ -24,8 +24,7 @@ export class AuthService {
       throw new Error(error.message);
     }
 
-    // Assuming there is a user ID in the authentication data
-    const userId = data?.user.id;
+    const userId = data?.user?.id;
 
     if (!userId) {
       throw new Error('User ID not found in authentication data');
@@ -34,18 +33,15 @@ export class AuthService {
     // Fetch the user's profile based on the user ID
     const profile = await this.getUserProfile(userId);
 
-    // console.log("🚀 ~ UserService ~ signInUser ~ SignInsuccess!");
+    // Extract token from the data object based on its structure
+    const accessToken = data?.session?.access_token || '';
 
-    // const profileRole: string[] = Array.isArray(profile?.role)
-    // ?profile.role: [profile.role?.toString()];
-
-    // Return authentication data and user's profile and role
-    // , userProfile: profile teb3a el return 
-    return { authenticationData: data, profile };
+    return { authenticationData: { user: data?.user, session: data?.session }, profile, accessToken };
   } catch (error) {
     throw new Error(`Error signing in: ${error.message}`);
   }
 }
+
 
 async getUserProfile(userId: string): Promise<any> {
   const supabase = this.supabaseService.getClient();
@@ -54,7 +50,7 @@ async getUserProfile(userId: string): Promise<any> {
     
     const { data, error } = await supabase
       .from('profile')
-      .select('firstname,lastname')
+      .select('*')
       .eq('idprofile', userId)
       .single();
 
@@ -71,23 +67,39 @@ async getUserProfile(userId: string): Promise<any> {
 
 
 
-
 // -------------------------------------------------------Logout USER------------------------------------------------------------------------------------------
 
-async logout():Promise<any>{
+async logout(): Promise<void> {
+  const supabase = this.supabaseService.getClient(); // Obtenez l'instance du client Supabase
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw new Error(error.message);
+    }
+    console.log("User successfully logged out.");
+  } catch (error) {
+    throw new Error("Error logging out: " + error.message);
+  }
+}
 
+async getUserRole(userId: string): Promise<string> {
   const supabase = this.supabaseService.getClient();
 
-  let { error } = await supabase.auth.signOut({ scope: 'global' })
+  const { data, error } = await supabase.from('profile').select('role').eq('idprofile', userId).single();
+  console.log("🚀 User Role Data:", data); // Ajouter un message pour les données retournées
+
 
   if (error) {
-    throw new Error(error.message);
-  }
-  console.log("🚀 ~ UserService ~ logout ~ logout Success !");
-  return "Logout successful !"
+    console.error(error);
+    throw new Error('Une erreur s\'est produite lors de la récupération du rôle utilisateur');
   }
 
+  if (!data || !data.role) {
+    return ''; // L'utilisateur peut ne pas avoir de profil ou de rôle
+  }
 
+  return data.role;
+}
 
 
   create(createAuthDto: CreateAuthDto) {

@@ -7,8 +7,8 @@ import { Roles } from 'src/auth/decorators';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('quiz')
-@UseGuards(AuthGuard,RolesGuard)
-@Roles(1,2)
+// @UseGuards(AuthGuard,RolesGuard)
+// @Roles(1,2)
 export class QuizController {
 
   constructor(private readonly quizService: QuizService) {}
@@ -53,13 +53,14 @@ export class QuizController {
 
 //---------------------------------------------------Controller find One Quiz with RPC method ---------------------------------------------------------------
 
-  @Get('findoneQuiz/:idquiz')
+@Get('findoneQuiz/:idquiz')
 
-  findOne(@Param('idquiz') idquiz: string) {
+findOne(@Param('idquiz') idquiz: string) {
 
-    return this.quizService.findOneQuiz(idquiz);
+  return this.quizService.findOneQuiz(idquiz);
 
-  }
+}
+
 
 
 //---------------------------------------------------Controller delete Quiz with RPC method ---------------------------------------------------------------
