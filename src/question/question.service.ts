@@ -130,7 +130,7 @@ async findQuestionsByQuizId(quizId: string) {
 
     if (error) {
       throw new Error(error.message);
-    }
+    } 
 
     if (!questions.length) {
       return null; 
