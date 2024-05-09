@@ -22,6 +22,12 @@ export class AuthController {
         await this.authService.logout();
   }
 
+  @Post('signin-email')
+  async signInWithEmail(@Body() body: { email: string, redirectTo: string, quizId: string }) {
+    const { email, redirectTo, quizId } = body;
+    return this.authService.signInWithEmail(email, redirectTo, quizId);
+  }
+  
 
  
 }

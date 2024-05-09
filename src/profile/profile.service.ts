@@ -14,7 +14,7 @@ export class ProfileService {
     const supabase = this.supabaseService.getClient();
     const {error : profileError} = await supabase.rpc('create_profile_user', {
       firstname : dto.firstname, 
-      lastname : dto.lastname, 
+      lastname : dto.lastname,  
       address: dto.address,
       birthdate: dto.birthdate,
       joiningdate: dto.joiningdate,
@@ -27,7 +27,7 @@ export class ProfileService {
       throw new Error(profileError.message);   
     }
     return console.log("🚀 ~ UserService ~ createProfile ~ User Profile Created Successfully !");
-    }  
+    }    
 
 
 // ----------------------------------------------Get All Profile in table public.profile with RPC------------------------------------------------------------------------------------------

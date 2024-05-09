@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SupabaseService } from 'supabase/supabase.service';
@@ -14,12 +14,12 @@ import { GroupReportModule } from './group-report/group-report.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesGuard } from './auth/guards/roles.guard'; 
 import { APP_GUARD } from '@nestjs/core'; 
-import { SupabaseModule } from 'supabase/supabase .module';
 import { AiModule } from './ai/ai.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { UploadController } from './uploadPdf/upload/upload.controller';
 import { PdfService } from './uploadPdf/pdf/pdf.service';
+import { SupabaseModule } from 'supabase/supabase .module';
 
 @Module({
   imports: [
@@ -37,15 +37,12 @@ import { PdfService } from './uploadPdf/pdf/pdf.service';
     AiModule,
     QuizModule
   ],
-  controllers: [AppController,UploadController],
+  controllers: [AppController, UploadController],
   providers: [
     AppService,
     SupabaseService,
     RolesGuard, 
     PdfService
-      
   ],
 })
-export class AppModule  {
-
-}
+export class AppModule {}

@@ -1,20 +1,18 @@
-import { IsNotEmpty, IsString } from "@nestjs/class-validator";
+import { IsNotEmpty, IsString} from '@nestjs/class-validator'
 
 export class GetChatCompletionAnswerInputDTO{
     @IsString()
     @IsNotEmpty()
-    message:string;
+    message: string;
 }
 
 export class GetChatCompletionAnswerOutputDTO{
     @IsString()
     @IsNotEmpty()
-    aiMessage:string;
-
-
-    static getInstance(aiMessage: string){
-        const result=new GetChatCompletionAnswerOutputDTO();
-        result.aiMessage=aiMessage;
-        return result;
+    aiMessage: string; 
+    static getInstance (aiMessage : string){
+        const result = new GetChatCompletionAnswerOutputDTO(); 
+        result.aiMessage = aiMessage; 
+        return result; 
     }
-}
+} 

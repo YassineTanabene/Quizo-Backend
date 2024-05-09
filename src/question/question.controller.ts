@@ -15,7 +15,7 @@ export class QuestionController {
   @Post('createQuestion')
   create(@Body() createQuestionDto: CreateQuestionDto) {
     return this.questionService.createQuestions(createQuestionDto);
-  }
+  }  
 
   // @Post('createQuestion')
   // create(@Body() createQuestionDto: CreateQuestionDto, createAnwerDto:CreateAnswerDto[]) {

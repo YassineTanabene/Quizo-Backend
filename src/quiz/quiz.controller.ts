@@ -43,7 +43,7 @@ export class QuizController {
 
   findAll() {
 
-    return this.quizService.findAllQuizes();
+    return this.quizService.findAllQuizes();  
 
   }
 

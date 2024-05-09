@@ -9,6 +9,28 @@ export class AuthService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
 
+  async signInWithEmail(email: string, redirectTo: string, quizId: string): Promise<any> {
+    const supabase = this.supabaseService.getClient();
+    try {
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `http://localhost:5173?quizId=${quizId}`, // Utiliser selectedQuizId à la place de quizId
+      },
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data.user; 
+  } catch (error) {
+    throw new Error(`Error signing in: ${error.message}`);
+  }
+  }
+  
+  
+
+
 
   async SignInUser(email: string, password: string): Promise<any> {
     const supabase = this.supabaseService.getClient();

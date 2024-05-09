@@ -1,25 +1,38 @@
-import { AIMessage, BaseMessage, HumanMessage, SystemMessage } from 'langchain/schema';
+import {
+    HumanMessage, 
+    AIMessage, 
+    SystemMessage,
+    BaseMessage,
+} from 'langchain/schema';
 
 
-export class ChatHistoryManager {
-    readonly chatHistory: BaseMessage[];
+export class ChatHistoryManager{
+    
+    readonly chatHistory : BaseMessage[];
 
-    constructor (systemMessage?:string){
-        this.chatHistory=[];
+    constructor(systemMessage?: string ){
+        this.chatHistory = [];
 
-        if(systemMessage){
+        if (systemMessage){
             this.addSystemMessage(systemMessage);
         }
     }
-     addSystemMessage(message: string) {
+
+
+
+    private addSystemMessage(message: string ){
         this.chatHistory.push(new SystemMessage(message));
     }
 
-     addAiMessage(message: string) {
-        this.chatHistory.push(new AIMessage(message));
 
+
+    addAiMessage(message: string ){
+        this.chatHistory.push(new AIMessage(message));
     }
-     addHumanMessage(message: string) {
+
+
+
+    addHumanMessage(message: string){
         this.chatHistory.push(new HumanMessage(message));
     }
 }

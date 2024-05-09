@@ -15,11 +15,15 @@ async createGroupReport(createDto: CreateGroupReportDto): Promise<any> {
     .from('group_report')
     .insert([
       {
+        quizid: createDto.quizid,
+        userid: createDto.userid,
         totalscore: createDto.totalscore,
         startingdate: createDto.startingdate,
         endingdate: createDto.endingdate,
-        notes: createDto.notes
-      },
+        note: createDto.note,
+        email: createDto.email,
+        statut: createDto.statut,
+      },  
     ]);
 
   if (error) {
@@ -52,21 +56,20 @@ async getAllGroupReport(): Promise<any> {
 // -----------------------------------------------------Get One GroupReport in public.group_report  without RPC------------------------------------------------------------------------------------------
 
 
-async getOneGroupReport(id: string): Promise<any> {
+async getOneGroupReport(quizId: string): Promise<any> {
   const supabase = this.supabaseService.getClient();
   try {
     const { data, error } = await supabase
       .from('group_report')
       .select('*')
-      .eq('idreport', id)
-      .single();
+      .eq('quizid', quizId);
 
     if (error) {
       throw new Error(error.message);
     }
     return data;
   } catch (error) {
-    console.error('Error fetching group:', error.message);
+    console.error('Error fetching group reports by quiz id:', error.message);
     return null;
   }
 }
@@ -81,7 +84,9 @@ async updateGroupReport(id: string, updateDto: UpdateGroupReportDto): Promise<an
       totalscore: updateDto.totalscore,
       startingdate: updateDto.startingdate,
       endingdate: updateDto.endingdate,
-      notes: updateDto.notes
+      note: updateDto.note,
+      user: updateDto.email,
+
     })
     .eq('idreport', id);
 
