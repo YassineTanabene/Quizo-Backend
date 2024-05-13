@@ -21,7 +21,7 @@ export class ProfileService {
       profilepicture: dto.profilepicture,  
       groupe: dto.groupe,
       id_user : id 
-    });
+    });  
     if (profileError){
       await supabase.auth.admin.deleteUser(id);
       throw new Error(profileError.message);   

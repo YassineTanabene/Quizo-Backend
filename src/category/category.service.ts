@@ -36,38 +36,43 @@ export class CategoryService {
 //---------------------------------------------------Service find One Category with RPC method ---------------------------------------------------------------
 
 
-  async findOneCategory(createCategoryDto: CreateCategoryDto) {
+async findOneCategory(id:string) {
 
-    const supabase = this.supabaseService.getClient();
+  const supabase = this.supabaseService.getClient();
 
-    const {data, error: get_one_category} = await supabase.rpc('findonecategory', {id: createCategoryDto.id})
+  const {data, error: get_one_category} = await supabase.rpc('findonecategory', {id: id})
 
-    if (get_one_category){
+  if (get_one_category){
 
-      throw new Error(get_one_category.message)
-    }
-
-    return data;
-
+    throw new Error(get_one_category.message)
   }
+
+  return data;
+
+}
 
 
   //---------------------------------------------------Service update Category with RPC method ---------------------------------------------------------------
 
-  async updateCategory(id: string,updateCategoryDto:UpdateCategoryDto):Promise<any>{
-  
+  async updateCategory(idcategory:string,updateCategoryDto: UpdateCategoryDto):Promise<Category> {
+
     const supabase = this.supabaseService.getClient();
   
-    const {data : Category, error: update_category_error} = await supabase.rpc('updatecategory', {id_user: id,idcategory: updateCategoryDto.idcategory,new_categoryname:updateCategoryDto.new_categoryname})
-    
-    if (update_category_error){
-    
-      throw new Error(update_category_error.message);
-    
+    const{ data : Category, error:  CategoryUpdateError} = await supabase
+    .from('category')
+    .update([{
+      categoryname : updateCategoryDto.new_categoryname,
+  
+    }]).eq('idcategory',idcategory)
+  
+    if (CategoryUpdateError){
+  
+      throw new Error(CategoryUpdateError.message);
+  
     }
     
-    return console.log("🚀 ~ CategoryService ~ update ~ Category updated successfully !"),Category;
-  
+    return console.log("🚀 ~ AnswerService ~ updateAnswer ~ Answer Successfully Updated !"),Category;
+    
   }
 
 
