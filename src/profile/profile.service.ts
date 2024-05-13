@@ -18,7 +18,7 @@ export class ProfileService {
       address: dto.address,
       birthdate: dto.birthdate,
       joiningdate: dto.joiningdate,
-      profilepicture: dto.profilepicture,
+      profilepicture: dto.profilepicture,  
       groupe: dto.groupe,
       id_user : id 
     });
@@ -79,7 +79,7 @@ export class ProfileService {
       new_address: updateProfileDto.address,
       new_birthdate: updateProfileDto.birthdate,
       new_joiningdate: updateProfileDto.joiningdate,
-      new_profilepicture: updateProfileDto.profilepicture,
+      new_profilepicture: updateProfileDto.profilepicture, 
       new_groupe: updateProfileDto.groupe,
     });  
    
