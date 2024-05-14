@@ -164,6 +164,8 @@ async getUser(id: string): Promise<any> {
 
 async getAllUser(): Promise<any> {
   const supabase = this.supabaseService.getClient(); 
+  console.log("all users" + supabase);
+
   try {
     const { data: userData, error: userError } = await supabase.auth.admin.listUsers();
     if (userError) {

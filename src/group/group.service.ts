@@ -39,12 +39,13 @@ export class GroupService {
       if (error) {
         throw new Error(error.message);
       }
+      
       return data;
     } catch (error) {
       console.error('Error fetching group:', error.message);
       return null;
     }
-  }
+  } 
 
   // -----------------------------------------------------Get One Group in public.group without RPC------------------------------------------------------------------------------------------
 

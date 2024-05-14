@@ -98,17 +98,37 @@ export class QuizService {
 
 //---------------------------------------------------Service find All Categories with RPC method ---------------------------------------------------------------
 
-async findAllQuizes() {
+// async findAllQuizes() {
 
+//   const supabase = this.supabaseService.getClient();
+
+//   const {data, error} = await supabase.rpc('findallquizes');
+
+//   return console.log("🚀 ~ QuizService ~ finAllQuizes ~ Quizes list is ready !") , data;
+
+
+// }
+
+
+async findAllQuizes(): Promise<any> {
   const supabase = this.supabaseService.getClient();
+  console.log(supabase);
 
-  const {data, error} = await supabase.rpc('findallquizes');
+  try {
+   
+      const { data, error } = await supabase
+      .from('quiz')
+      .select('*');
+  
+        console.log(data);
 
-  return console.log("🚀 ~ QuizService ~ finAllQuizes ~ Quizes list is ready !") , data;
-
-}
-
-
+    return data; 
+  } catch (error) {
+    console.error('Error fetching quiz:', error.message);
+    console.error('Error fetching quiz:', error.message),null;
+  }
+}  
+                
 //---------------------------------------------------Service find One Category with RPC method ---------------------------------------------------------------
 
 async findOneQuiz(idquiz: string) {
@@ -117,7 +137,7 @@ async findOneQuiz(idquiz: string) {
   try {
     const { data: quizData, error: findOneQuizError } = await supabase.rpc('findonequiz', { idquiz: idquiz });
     if (findOneQuizError) {
-      throw new Error(findOneQuizError.message);
+      throw new Error(findOneQuizError.message); 
     }
 
     if (!quizData) {

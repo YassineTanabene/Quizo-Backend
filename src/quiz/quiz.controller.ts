@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
@@ -7,13 +7,13 @@ import { Roles } from 'src/auth/decorators';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('quiz')
-// @UseGuards(AuthGuard,RolesGuard)
+// @UseGuards(AuthGuard)
 // @Roles(1,2)
-export class QuizController {
+export class QuizController { 
 
   constructor(private readonly quizService: QuizService) {}
 
-
+ 
   
 //---------------------------------------------------Controller Create quiz with RPC method ---------------------------------------------------------------
 
@@ -45,6 +45,7 @@ export class QuizController {
   @Get('findallQuizes')
 
   findAll() {
+    console.log("find all");
 
     return this.quizService.findAllQuizes();
 

@@ -14,6 +14,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
 
 
+  @Post('signin-email')
+  async signInWithEmail(@Body() body: { email: string, redirectTo: string, quizId: string }) {
+    const { email, redirectTo, quizId } = body;
+    return this.authService.signInWithEmail(email, redirectTo, quizId);
+  }
+
 //--------------------------------user.controller_signInUserPWD------------------------------------------------
 // @UseGuards(RolesGuard)
 // @Roles(1,2)
