@@ -15,7 +15,7 @@ export class ChatCompletionApiService {
     this.chatHistory=new ChatHistoryManager();
     this.chat=new ChatOpenAI ({
       temperature:DEFAULT_TEMPERATURE,
-      openAIApiKey:"sk-proj-XLxXBotBiuQRYcVIV6I1T3BlbkFJyEEcnDXkSF827EyEkS0O",
+      openAIApiKey:API_KEY,
       modelName:DEFAULT_MODEL,
     })
   }
